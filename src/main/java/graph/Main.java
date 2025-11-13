@@ -32,12 +32,22 @@ public class Main {
         }
 
         System.out.println("\nConnected components:");
-
         List<List<Integer>> components = findComponents(vertexCount, mst);
 
         int compId = 1;
         for (List<Integer> comp : components) {
             System.out.println("Component " + compId++ + ": " + comp);
+        }
+
+        Edge replacement = findReplacementEdge(edges, components);
+
+        System.out.println("\nReplacement edge found: " + replacement);
+
+        mst.add(replacement);
+
+        System.out.println("\nMST after reconnection:");
+        for (Edge e : mst) {
+            System.out.println(e);
         }
     }
 
@@ -47,6 +57,7 @@ public class Main {
         for (int i = 0; i < vertexCount; i++) {
             adj.add(new ArrayList<>());
         }
+
         for (Edge e : mst) {
             adj.get(e.u).add(e.v);
             adj.get(e.v).add(e.u);
@@ -78,5 +89,23 @@ public class Main {
         }
 
         return components;
+    }
+
+    private static Edge findReplacementEdge(List<Edge> allEdges, List<List<Integer>> components) {
+        Set<Integer> compA = new HashSet<>(components.get(0));
+        Set<Integer> compB = new HashSet<>(components.get(1));
+
+        Edge best = null;
+
+        for (Edge e : allEdges) {
+            if ( (compA.contains(e.u) && compB.contains(e.v)) ||
+                    (compA.contains(e.v) && compB.contains(e.u)) ) {
+
+                if (best == null || e.weight < best.weight) {
+                    best = e;
+                }
+            }
+        }
+        return best;
     }
 }
