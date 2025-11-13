@@ -1,3 +1,5 @@
+package graph;
+
 public class UnionFind {
     private int[] parent;
     private int[] rank;
