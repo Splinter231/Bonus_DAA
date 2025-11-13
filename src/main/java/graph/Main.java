@@ -45,10 +45,14 @@ public class Main {
 
         mst.add(replacement);
 
-        System.out.println("\nMST after reconnection:");
+        System.out.println("\n===== FINAL MST AFTER RECONNECTION =====");
+        int totalWeight = 0;
         for (Edge e : mst) {
             System.out.println(e);
+            totalWeight += e.weight;
         }
+        System.out.println("Total MST Weight = " + totalWeight);
+
     }
 
     private static List<List<Integer>> findComponents(int vertexCount, List<Edge> mst) {
