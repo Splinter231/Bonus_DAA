@@ -22,5 +22,16 @@ public class Main {
         for (Edge e : mst) {
             System.out.println(e);
         }
+
+        int removeIndex = 1;
+
+        Edge removed = mst.remove(removeIndex);
+
+        System.out.println("\nRemoved edge: " + removed);
+
+        System.out.println("\nMST edges (after removal):");
+        for (Edge e : mst) {
+            System.out.println(e);
+        }
     }
 }
