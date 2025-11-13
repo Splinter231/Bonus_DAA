@@ -1,7 +1,6 @@
 package graph;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -24,14 +23,60 @@ public class Main {
         }
 
         int removeIndex = 1;
-
         Edge removed = mst.remove(removeIndex);
 
         System.out.println("\nRemoved edge: " + removed);
-
         System.out.println("\nMST edges (after removal):");
         for (Edge e : mst) {
             System.out.println(e);
         }
+
+        System.out.println("\nConnected components:");
+
+        List<List<Integer>> components = findComponents(vertexCount, mst);
+
+        int compId = 1;
+        for (List<Integer> comp : components) {
+            System.out.println("Component " + compId++ + ": " + comp);
+        }
+    }
+
+    private static List<List<Integer>> findComponents(int vertexCount, List<Edge> mst) {
+
+        List<List<Integer>> adj = new ArrayList<>();
+        for (int i = 0; i < vertexCount; i++) {
+            adj.add(new ArrayList<>());
+        }
+        for (Edge e : mst) {
+            adj.get(e.u).add(e.v);
+            adj.get(e.v).add(e.u);
+        }
+
+        boolean[] visited = new boolean[vertexCount];
+        List<List<Integer>> components = new ArrayList<>();
+
+        for (int start = 0; start < vertexCount; start++) {
+            if (!visited[start]) {
+                List<Integer> comp = new ArrayList<>();
+                Queue<Integer> q = new LinkedList<>();
+                q.add(start);
+                visited[start] = true;
+
+                while (!q.isEmpty()) {
+                    int node = q.poll();
+                    comp.add(node);
+                    for (int nei : adj.get(node)) {
+                        if (!visited[nei]) {
+                            visited[nei] = true;
+                            q.add(nei);
+                        }
+                    }
+                }
+
+                components.add(comp);
+            }
+        }
+
+        return components;
     }
 }
